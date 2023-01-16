@@ -1,5 +1,9 @@
+import math
+import math
+
+
 class Node:
-    def __init__(self, value: int = None):
+    def __init__(self, value=None):
         self.value = value
         self.left_child = None
         self.right_child = None
@@ -26,10 +30,10 @@ class Node:
             self.left_child = Node(value)
             self.left_child.parent = Node(self.value)
             return
-
         '''Jeśli wstawiana wartość jest większa od aktualnej wartości węzła oraz węzeł posiada prawe dziecko wywołujemy
         rekurencyjnie metodę wstawiania na prawym dziecku. Jeśli węzeł nie ma prawego dziecka, ustawiamy jego wartość
         na węzeł z wstawianą wartością'''
+
         if self.right_child:
             self.right_child.insert_value(value)
             self.right_child.parent = Node(self.value)
@@ -91,4 +95,61 @@ class Node:
         return self.right_child.find_value(value)
 
     def delete_value(self, value):
+        if not self:
+            return self
+
+        if self.value < value:
+            self.right_child = self.right_child.delete_value(value)
+            return self
+
+        if self.value > value:
+            self.left_child = self.left_child.delete_value(value)
+            return self
+
+        if not self.left_child:
+            return self.right_child
+
+        if not self.right_child:
+            return self.left_child
+
+        min_value = self.right_child.get_min_value()
+
+        self.value = min_value
+        self.right_child = self.right_child.delete_value(min_value)
+        return self
+
+    def display(self):
+        pass
+
+    def display_preorder(self):
+        if not self.parent:
+            print("Preorder: ", end='')
+        if self.value:
+            print(self.value, end=' ')
+        if self.left_child:
+            self.left_child.display_preorder()
+        if self.right_child:
+            self.right_child.display_preorder()
+
+    def display_inorder(self):
+        if not self.parent:
+            print("Inorder: ", end='')
+        if self.left_child:
+            self.left_child.display_inorder()
+        if self.value:
+            print(self.value, end=' ')
+        if self.right_child:
+            self.right_child.display_inorder()
+
+    def display_postorder(self):
+        if not self.parent:
+            print("Postorder: ", end='')
+        if self.left_child:
+            self.left_child.display_postorder()
+        if self.right_child:
+            self.right_child.display_postorder()
+        if self.value:
+            print(self.value, end=' ')
+
+    def get_height(self):
         pass
